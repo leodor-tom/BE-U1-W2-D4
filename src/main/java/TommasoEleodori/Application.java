@@ -52,12 +52,14 @@ public class Application {
         totalSalesPerCustomer.forEach(Application::totalAmount);
 
         System.out.println("******************** most expensive product ************");
-        Optional<Product> mostExpensiveProduct = products.stream()
-                .max(Comparator.comparingDouble(Product::getPrice));
+        List<Product> mostExpensiveProduct = products.stream()
+                .sorted(Comparator.comparingDouble(Product::getPrice).reversed())
+                .limit(3)
+                        .toList();
 
-        System.out.println("the most expensive product is: " + mostExpensiveProduct.get().getName() + " " + mostExpensiveProduct.get().getPrice() + "€");
+        System.out.println( mostExpensiveProduct);
 
-        System.out.println("******************** average order price ************");
+        System.out.println("******************** avrage order price ************");
         double averageOrderPrice = orders.stream()
                 .collect(Collectors.averagingDouble(Order::getTotal));
 

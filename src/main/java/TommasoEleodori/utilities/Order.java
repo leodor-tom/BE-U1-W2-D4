@@ -61,7 +61,7 @@ public class Order {
                 ", deliveryDate=" + deliveryDate +
                 ", products=" + products +
                 ", customer=" + customer +
-                ", price=" + price +
+                ", price=" + total +
                 '}';
     }
 }
