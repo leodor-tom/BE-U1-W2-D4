@@ -83,8 +83,10 @@ public class Application {
         totalPricePerCaegory.forEach(Application::totalPerCategory);
 
         //****************************** file **********************************
-
-       saveProductsToDisk(products,"src/products.txt");
+        String filePath = "src/products.txt";
+       saveProductsToDisk(products,filePath);
+        List<Product> readProducts = readProductsFromDisk(filePath);
+        System.out.println("new list" + readProducts);
     }
 
 
@@ -120,5 +122,25 @@ public class Application {
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    private static List<Product> readProductsFromDisk(String filePath) {
+        List<Product> productList = new ArrayList<>();
+        try {
+            String data =  FileUtils.readFileToString(new File(filePath), "UTF-8");
+            String[] productEntries = data.split("#");
+            for (String entry : productEntries) {
+                String[] fields = entry.split("@");
+                if (fields.length == 3) {
+                    String name = fields[0];
+                    String category = fields[1];
+                    double price = Double.parseDouble(fields[2]);
+                    productList.add(new Product( name, category, price));
+                }
+            }
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+        return productList;
     }
 }
