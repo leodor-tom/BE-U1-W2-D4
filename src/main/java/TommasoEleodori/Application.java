@@ -4,9 +4,7 @@ import TommasoEleodori.utilities.Customer;
 import TommasoEleodori.utilities.Order;
 import TommasoEleodori.utilities.Product;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Application {
@@ -50,17 +48,30 @@ public class Application {
         List<Order> orders = Arrays.asList(orderAldo, orderAldo2, orderAldo3, orderAldo4, orderAldo5, orderGiovanni,
                 orderGiovanni2, orderGiovanni3, orderGiovanni4, orderGiovanni5, orderGiacomo, orderGiacomo2);
 
+
+        System.out.println("******************** order by customer ************");
         Map< Customer, List<Order>> ordersByCustomer = orders.stream()
                 .collect(Collectors.groupingBy(Order::getCustomer));
 
-        System.out.println("******************** order by customer ************");
         ordersByCustomer.forEach(Application::accept);
 
+        System.out.println("******************** total sales per customer ************");
         Map<Customer, Double>  totalSalesPerCustomer = orders.stream()
                 .collect(Collectors.groupingBy(Order::getCustomer, Collectors.summingDouble(Order::getPrice)));
 
-        System.out.println("******************** total sales per customer ************");
         totalSalesPerCustomer.forEach(Application::totalAmount);
+
+        System.out.println("******************** most expensive product ************");
+        Optional<Product> mostExpensiveProduct = products.stream()
+                .max(Comparator.comparingDouble(Product::getPrice));
+
+        System.out.println("the most expensive product is: " + mostExpensiveProduct.get().getName() + " " + mostExpensiveProduct.get().getPrice() + "€");
+
+        System.out.println("******************** average order price ************");
+        double averageOrderPrice = orders.stream()
+                .collect(Collectors.averagingDouble(Order::getPrice));
+
+        System.out.println("the average price of an order is: " + averageOrderPrice + "€");
     }
 
 
