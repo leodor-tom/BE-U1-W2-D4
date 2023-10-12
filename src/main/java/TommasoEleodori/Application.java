@@ -3,7 +3,10 @@ package TommasoEleodori;
 import TommasoEleodori.utilities.Customer;
 import TommasoEleodori.utilities.Order;
 import TommasoEleodori.utilities.Product;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -72,6 +75,16 @@ public class Application {
                 .collect(Collectors.averagingDouble(Order::getPrice));
 
         System.out.println("the average price of an order is: " + averageOrderPrice + "€");
+
+        System.out.println("******************** total price per category ************");
+        Map<String, Double> totalPricePerCaegory = products.stream()
+                .collect(Collectors.groupingBy(Product::getCategory, Collectors.summingDouble(Product::getPrice)));
+
+        totalPricePerCaegory.forEach(Application::totalPerCategory);
+
+        //****************************** file **********************************
+
+       saveProductsToDisk(products,"src/products.txt");
     }
 
 
@@ -81,5 +94,31 @@ public class Application {
 
     private static void totalAmount(Customer customer, Double price) {
         System.out.println("Customer: " + customer + ", total amount: " + price);
+    }
+
+    private static void  totalPerCategory(String category, Double total) {
+        System.out.println("Category: " + category + ", total: " + total);
+    }
+
+    private  static void saveProductsToDisk(List<Product> products , String filePath) {
+        StringBuilder sb = new StringBuilder();
+        for (Product product : products) {
+            sb.append(product.getName());
+            sb.append("@");
+            sb.append(product.getCategory());
+            sb.append("@");
+            sb.append(product.getPrice());
+            sb.append("#");
+        }
+
+        if(!sb.isEmpty()) {
+            sb.setLength(sb.length() - 1);
+        }
+
+        try{
+            FileUtils.writeStringToFile( new File(filePath), sb.toString(), "UTF-8");
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
     }
 }
