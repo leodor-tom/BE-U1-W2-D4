@@ -19,20 +19,7 @@ public class Application {
         Customer giacomo = new Customer("Giacomo");
 
 
-        Product toy = new Product("plane", "Toy", 35);
-        Product phone = new Product("pear", "Electronics", 1000);
-        Product book = new Product("Big Brother", "Books", 35);
-        Product book2 = new Product("The Show of Records, DELUXE", "Books", 100);
-        Product book3 = new Product("Divina Commedia", "Books", 99.99);
-        Product book4 = new Product("Clean code", "Books", 27);
-        Product babyBottle = new Product("Baby Bottle", "Baby", 5.99);
-        Product diapers = new Product("Diapers", "Baby", 29.99);
-        Product stroller = new Product("Stroller", "Baby", 199.99);
-        Product toyCar = new Product("toy car", "Boys", 40);
-        Product actionFigure = new Product("action figure", "Boys", 15);
-        Product legoSet = new Product("Lego set", "Boys", 100);
-
-        List<Product> products = Arrays.asList(book, book2, book3, book4, toy, phone, babyBottle, diapers, stroller, toyCar, actionFigure, legoSet);
+        List<Product> products = getProducts();
 
 
         Order orderAldo = new Order(aldo, products);
@@ -60,7 +47,7 @@ public class Application {
 
         System.out.println("******************** total sales per customer ************");
         Map<Customer, Double>  totalSalesPerCustomer = orders.stream()
-                .collect(Collectors.groupingBy(Order::getCustomer, Collectors.summingDouble(Order::getPrice)));
+                .collect(Collectors.groupingBy(Order::getCustomer, Collectors.summingDouble(Order::getTotal)));
 
         totalSalesPerCustomer.forEach(Application::totalAmount);
 
@@ -72,7 +59,7 @@ public class Application {
 
         System.out.println("******************** average order price ************");
         double averageOrderPrice = orders.stream()
-                .collect(Collectors.averagingDouble(Order::getPrice));
+                .collect(Collectors.averagingDouble(Order::getTotal));
 
         System.out.println("the average price of an order is: " + averageOrderPrice + "€");
 
@@ -89,13 +76,31 @@ public class Application {
         System.out.println("new list" + readProducts);
     }
 
+    private static List<Product> getProducts() {
+        Product toy = new Product("plane", "Toy", 35);
+        Product phone = new Product("pear", "Electronics", 1000);
+        Product book = new Product("Big Brother", "Books", 35);
+        Product book2 = new Product("The Show of Records, DELUXE", "Books", 100);
+        Product book3 = new Product("Divina Commedia", "Books", 99.99);
+        Product book4 = new Product("Clean code", "Books", 27);
+        Product babyBottle = new Product("Baby Bottle", "Baby", 5.99);
+        Product diapers = new Product("Diapers", "Baby", 29.99);
+        Product stroller = new Product("Stroller", "Baby", 199.99);
+        Product toyCar = new Product("toy car", "Boys", 40);
+        Product actionFigure = new Product("action figure", "Boys", 15);
+        Product legoSet = new Product("Lego set", "Boys", 100);
+
+        List<Product> products = Arrays.asList(book, book2, book3, book4, toy, phone, babyBottle, diapers, stroller, toyCar, actionFigure, legoSet);
+        return products;
+    }
+
 
     private static void accept(Customer customer, List<Order> orders1) {
         System.out.println("Customer: " + customer + ", orders: " + orders1);
     }
 
-    private static void totalAmount(Customer customer, Double price) {
-        System.out.println("Customer: " + customer + ", total amount: " + price);
+    private static void totalAmount(Customer customer, Double total) {
+        System.out.println("Customer: " + customer + ", total amount: " + total);
     }
 
     private static void  totalPerCategory(String category, Double total) {

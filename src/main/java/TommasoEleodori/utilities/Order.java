@@ -11,7 +11,7 @@ public class Order {
     private final Customer customer;
     private String status;
     private List<Product> products;
-    private double price;
+    private double total;
 
     public Order(Customer customer, List<Product> products) {
         if (customer == null || products == null || products.isEmpty())
@@ -24,7 +24,7 @@ public class Order {
         this.deliveryDate = orderDate.plusDays(3);
         this.status = delivery(this.deliveryDate);
         this.customer.placeOrder(this);
-        this.price = products.stream().mapToDouble(Product::getPrice).sum();
+        this.total = products.stream().mapToDouble(Product::getPrice).sum();
     }
 
     private String delivery(LocalDate deliveryDate) {
@@ -44,8 +44,8 @@ public class Order {
 
     public Customer getCustomer(){return customer;}
 
-    public double getPrice() {
-        return price;
+    public double getTotal() {
+        return total;
     }
 
     public void setProducts(List<Product> products) {
